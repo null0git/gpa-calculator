@@ -7,50 +7,154 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GPA Calc">
 
-<link rel="manifest" href="manifest.json">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Modern GPA Calculator</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:radial-gradient(circle at top left,#2563eb33,transparent 25%),radial-gradient(circle at bottom right,#7c3aed33,transparent 25%),#020617;color:white;min-height:100vh}
+body{
+font-family:'Inter',sans-serif;
+background:radial-gradient(circle at top left,#2563eb33,transparent 25%),
+radial-gradient(circle at bottom right,#7c3aed33,transparent 25%),#020617;
+color:white;
+min-height:100vh;
+padding-bottom:80px;
+}
 
-#loader{position:fixed;inset:0;background:#020617;display:flex;justify-content:center;align-items:center;z-index:9999}
-.loader-spinner{width:65px;height:65px;border-radius:50%;border:4px solid rgba(255,255,255,.08);border-top:4px solid #38bdf8;animation:spin 1s linear infinite}
+/* Loader */
+#loader{
+position:fixed;inset:0;
+background:#020617;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+.loader-spinner{
+width:60px;height:60px;
+border-radius:50%;
+border:4px solid rgba(255,255,255,.1);
+border-top:4px solid #38bdf8;
+animation:spin 1s linear infinite;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.container{max-width:1150px;margin:auto;padding:35px 20px}
+.container{
+max-width:1100px;
+margin:auto;
+padding:25px 15px;
+}
 
-.hero{text-align:center;margin-bottom:25px}
-.hero h1{font-size:46px;background:linear-gradient(to right,#38bdf8,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero{text-align:center;margin-bottom:15px}
+.hero h1{
+font-size:40px;
+background:linear-gradient(to right,#38bdf8,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-.tabs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.tab{padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);cursor:pointer;background:#0f172a;color:#cbd5e1}
-.tab.active{background:linear-gradient(135deg,#2563eb,#7c3aed);color:white}
+.tabs{
+display:flex;
+justify-content:center;
+gap:10px;
+margin:15px 0;
+}
 
-.main-card{background:rgba(15,23,42,.72);border-radius:20px;padding:20px}
+.tab{
+padding:10px 14px;
+border-radius:12px;
+background:#0f172a;
+border:1px solid rgba(255,255,255,.1);
+cursor:pointer;
+color:#94a3b8;
+}
+
+.tab.active{
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+color:white;
+}
+
+.main-card{
+background:rgba(15,23,42,.75);
+border-radius:18px;
+padding:15px;
+}
 
 table{width:100%;border-collapse:collapse}
-th,td{padding:14px;border-top:1px solid rgba(255,255,255,.05)}
+th,td{
+padding:12px;
+border-top:1px solid rgba(255,255,255,.05);
+text-align:left;
+}
 
-.subject{font-weight:600}
+select{
+width:100%;
+padding:8px;
+border-radius:10px;
+background:#0f172a;
+color:white;
+border:1px solid rgba(255,255,255,.1);
+}
 
-select,input{width:100%;padding:10px;border-radius:10px;background:#0f172a;color:white;border:1px solid rgba(255,255,255,.1)}
+.cards{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
+}
 
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:20px}
-.card{padding:20px;border-radius:16px;background:#0f172a}
-.result{font-size:36px;font-weight:700}
+.card{
+background:#0f172a;
+padding:15px;
+border-radius:14px;
+text-align:center;
+}
 
+.result{
+font-size:32px;
+font-weight:700;
+}
+
+/* Mobile Nav */
+.mobile-nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:flex;
+background:rgba(15,23,42,.95);
+backdrop-filter:blur(12px);
+border-top:1px solid rgba(255,255,255,.08);
+z-index:999;
+}
+
+.nav-item{
+flex:1;
+text-align:center;
+padding:10px 0;
+color:#94a3b8;
+cursor:pointer;
+font-size:12px;
+}
+
+.nav-item i{
+display:block;
+font-size:20px;
+margin-bottom:3px;
+}
+
+.nav-item.active{
+color:#38bdf8;
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOADER -->
 <div id="loader">
 <div class="loader-spinner"></div>
 </div>
@@ -61,14 +165,14 @@ select,input{width:100%;padding:10px;border-radius:10px;background:#0f172a;color
 <h1>GPA Calculator</h1>
 </div>
 
-<!-- TABS -->
+<!-- TOP TABS -->
 <div class="tabs">
-<div class="tab active" data-tab="preEngineering">Pre-Engineering</div>
-<div class="tab" data-tab="naturalScience">Natural Science</div>
+<div class="tab active" data-tab="preEngineering">Pre-Eng</div>
+<div class="tab" data-tab="naturalScience">Science</div>
 </div>
 
+<!-- TABLE -->
 <div class="main-card">
-
 <table>
 <thead>
 <tr>
@@ -85,6 +189,7 @@ select,input{width:100%;padding:10px;border-radius:10px;background:#0f172a;color
 <div>GPA</div>
 <div class="result" id="gpa">0.00</div>
 </div>
+
 <div class="card">
 <div>CGPA</div>
 <div class="result" id="cgpa">0.00</div>
@@ -94,9 +199,22 @@ select,input{width:100%;padding:10px;border-radius:10px;background:#0f172a;color
 </div>
 </div>
 
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+<div class="nav-item active" data-tab="preEngineering">
+<i class="ri-flashlight-fill"></i>
+Pre-Eng
+</div>
+
+<div class="nav-item" data-tab="naturalScience">
+<i class="ri-leaf-fill"></i>
+Science
+</div>
+</div>
+
 <script>
 
-// ─── SUBJECT SETS ─────────────────────────────
+/* ─── DATA ─── */
 const subjectSets = {
 preEngineering: [
 ["Global Trends",4],
@@ -125,47 +243,45 @@ const gradePoints = {
 "D":1,"F":0
 };
 
-// ─── STORAGE ─────────────────────────────
-const STORAGE_KEY="gpa_v2";
+const STORAGE_KEY="gpa_app_v4";
 
 let activeTab="preEngineering";
+let storedData={};
 
-// ─── LOAD SAVE ───────────────────────────
+/* ─── SAFE LOAD ─── */
 function loadData(){
+try{
 const raw=JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}");
-activeTab = raw.activeTab || "preEngineering";
-return raw;
+activeTab=raw.activeTab||"preEngineering";
+storedData=raw.tabs||{};
+}catch(e){
+storedData={};
+activeTab="preEngineering";
+}
 }
 
+/* ─── SAVE ─── */
 function saveData(){
-const data = {
+localStorage.setItem(STORAGE_KEY,JSON.stringify({
 activeTab,
-tabs: storedData,
-firstGpa: document.getElementById("first_gpa")?.value || ""
-};
-localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+tabs:storedData
+}));
 }
 
-// ─── DATA CACHE ─────────────────────────
-let storedData = loadData().tabs || {};
-
-// ─── RENDER TABS ────────────────────────
-const tbody=document.getElementById("subjectsTable");
-
+/* ─── RENDER ─── */
 function render(){
+const tbody=document.getElementById("subjectsTable");
 tbody.innerHTML="";
-const subjects = subjectSets[activeTab];
 
-subjects.forEach(([name,ch],i)=>{
-
-const saved = storedData?.[activeTab]?.[i] || "4";
+subjectSets[activeTab].forEach((sub,i)=>{
+const saved=storedData?.[activeTab]?.[i]||"4";
 
 tbody.innerHTML+=`
 <tr>
-<td class="subject">${name}</td>
-<td>${ch}</td>
+<td>${sub[0]}</td>
+<td>${sub[1]}</td>
 <td>
-<select data-i="${i}" data-ch="${ch}">
+<select data-i="${i}" data-ch="${sub[1]}">
 ${Object.entries(gradePoints).map(([g,v])=>
 `<option value="${v}" ${v==saved?"selected":""}>${g}</option>`
 ).join("")}
@@ -178,13 +294,13 @@ attachEvents();
 calculate();
 }
 
-// ─── CALCULATE ───────────────────────────
+/* ─── CALCULATE ─── */
 function calculate(){
 let total=0,ch=0;
 
 document.querySelectorAll("select").forEach(s=>{
-total += parseFloat(s.value)*parseFloat(s.dataset.ch);
-ch += parseFloat(s.dataset.ch);
+total+=parseFloat(s.value)*parseFloat(s.dataset.ch);
+ch+=parseFloat(s.dataset.ch);
 });
 
 document.getElementById("gpa").innerText=(total/ch).toFixed(2);
@@ -193,38 +309,50 @@ document.getElementById("cgpa").innerText=(total/ch).toFixed(2);
 saveSelections();
 }
 
-// ─── SAVE PER TAB ────────────────────────
+/* ─── SAVE PER TAB ─── */
 function saveSelections(){
-storedData[activeTab] = {};
+storedData[activeTab]={};
+
 document.querySelectorAll("select").forEach(s=>{
 storedData[activeTab][s.dataset.i]=s.value;
 });
+
 saveData();
 }
 
-// ─── EVENTS ─────────────────────────────
+/* ─── EVENTS ─── */
 function attachEvents(){
 document.querySelectorAll("select").forEach(s=>{
 s.onchange=calculate;
 });
 }
 
-// ─── TAB SWITCH ──────────────────────────
-document.querySelectorAll(".tab").forEach(t=>{
-t.onclick=()=>{
-document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-t.classList.add("active");
-activeTab=t.dataset.tab;
-saveData();
-render();
-};
+/* ─── TAB SWITCH ─── */
+function setTab(tab){
+activeTab=tab;
+
+document.querySelectorAll(".tab,.nav-item").forEach(el=>{
+el.classList.toggle("active",el.dataset.tab===tab);
 });
 
-// ─── INIT ────────────────────────────────
+saveData();
 render();
+}
 
-// set active tab UI
-document.querySelector(`[data-tab="${activeTab}"]`).classList.add("active");
+document.querySelectorAll(".tab,.nav-item").forEach(el=>{
+el.onclick=()=>setTab(el.dataset.tab);
+});
+
+/* ─── INIT (FIXED LOADER) ─── */
+loadData();
+
+window.addEventListener("load",()=>{
+setTimeout(()=>{
+document.getElementById("loader").style.display="none";
+},400);
+
+setTab(activeTab);
+});
 
 </script>
 
